@@ -13,14 +13,14 @@ function handle(stream)  {
 }
 
 
-var response = "piggialo in to pané";
+var response = "vanni a pigiâlo into cû ";
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
 	console.log(message);
   	console.log('ricevuti %s bytes', message.length);
     console.log('sent back: %s', message.length);
-  	ws.send(`${response} ${message.length} volte`);
+  	ws.send(`${response} ${message.length} vòtte`);
 	  
   }).on('close', function () {
   	
