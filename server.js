@@ -7,6 +7,9 @@ const wss = WebSocket.createServer({host: '192.168.254.161', port: 8080},handle)
 function handle(stream)  {
 	var target = fs.createWriteStream('testalo.wav', { encoding: 'binary' });
 	stream.pipe(target);	
+  stream.on('close', function (){
+    target.end();
+  })
 }
 
 
@@ -17,9 +20,11 @@ wss.on('connection', function connection(ws) {
 	console.log(message);
   	console.log('ricevuti %s bytes', message.length);
     console.log('sent back: %s', message.length);
-	ws.send(`${response} ${message.length} volte`);
+  	ws.send(`${response} ${message.length} volte`);
 	  
   }).on('close', function () {
-  	file.end();
+  	
+  }).on('error',function (err) {
+    console.log("error:",err)
   });
 });
