@@ -15,7 +15,7 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
   const fs = require('fs')
  
   const file = fs.createWriteStream('test.wav', { encoding: 'binary' })
-  const ws = new WebSocket('ws://192.168.254.161:8080');
+  const ws = new WebSocket('ws://192.168.254.161:8090');
 
   standard_input.on('data', function(data) {
     switch(data) 
@@ -25,7 +25,7 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
         recorder.record({
           sampleRateHertz: sampleRateHertz,
           threshold: 0, //silence threshold
-          recordProgram: 'rec', // Try also "arecord" or "sox"
+          recordProgram: 'sox', // Try also "arecord" or "sox"
           silence: '1.0', //seconds of silence before ending
         })
         .stream()
