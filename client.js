@@ -7,7 +7,14 @@ var standard_input = process.stdin;
 
 // Set input character encoding.
 standard_input.setEncoding('utf-8');
-
+var record = 'r\n';
+var stop = 's\n';
+var quit = 'q\n'
+if (process.platform === 'win32') {
+  record = 'r\r\n';
+  stop = 's\r\n';
+  quit = 'q\r\n'
+}
 
 function microphoneStream(encoding, sampleRateHertz, languageCode) {
   const WebSocket = require('websocket-stream');
@@ -28,7 +35,7 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
   standard_input.on('data', function(data) {
     switch(data) 
     {
-      case 'r\n':
+      case record:
         console.log('Listening, s + Enter to stop.');
         recording = recorder.record({
            sampleRateHertz: sampleRateHertz,
@@ -42,11 +49,11 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
           .on('error', console.error)
          .pipe(ws);
       break;
-      case 's\n':
+      case stop:
         console.log('Stop recording');
         ws.socket.send("ENDCHUNK")
       break;
-      case 'q\n':
+      case quit:
         recording.stop();
         console.log('Stop recording and transmitting. BYE');
         process.exit();
