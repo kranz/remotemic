@@ -28,7 +28,7 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
   standard_input.on('data', function(data) {
     switch(data) 
     {
-      case 'r\r\n':
+      case 'r\n':
         console.log('Listening, s + Enter to stop.');
         recording = recorder.record({
            sampleRateHertz: sampleRateHertz,
@@ -42,12 +42,11 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
           .on('error', console.error)
          .pipe(ws);
       break;
-      case 's\r\n':
+      case 's\n':
         console.log('Stop recording');
-        recording.pause();
-        ws.send("ENDCHUNK")
+        ws.socket.send("ENDCHUNK")
       break;
-      case 'q\r\n':
+      case 'q\n':
         recording.stop();
         console.log('Stop recording and transmitting. BYE');
         process.exit();

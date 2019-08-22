@@ -48,6 +48,7 @@ const recognizeStream = client
 
 wss.on('connection', function connection(ws) {
   ws.on('message', function incoming(message) {
+    ws.send("bip bip!")
     if (message=="ENDCHUNK") {
       console.log(message);
       setTimeout(() => {
