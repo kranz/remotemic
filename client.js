@@ -24,7 +24,7 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
   const file = fs.createWriteStream('test.wav', { encoding: 'binary' })
   console.log('Inserire r+INVIO per registrare, s + INVIO to stoppare, q + INVIO per terminare.');
 
-  var recording = recorder.record({
+/*  var recording = recorder.record({
           sampleRateHertz: sampleRateHertz,
           threshold: 0, //silence threshold
           recordProgram: 'sox', // Try also "arecord" or "sox"
@@ -32,18 +32,22 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
         })
 
   var ws = new WebSocket('ws://192.168.254.161:8090');
+*/
+  var recording;
+  var ws;
+  recording = recorder.record({
+     sampleRateHertz: sampleRateHertz,
+     threshold: 0, //silence threshold
+     recordProgram: 'sox', // Try also "arecord" or "sox"
+     silence: '1.0', //seconds of silence before ending
+  })
+  ws = new WebSocket('ws://192.168.254.161:8090');
+
   standard_input.on('data', function(data) {
     switch(data) 
     {
       case record:
         console.log('Listening, s + Enter to stop.');
-        recording = recorder.record({
-           sampleRateHertz: sampleRateHertz,
-           threshold: 0, //silence threshold
-           recordProgram: 'sox', // Try also "arecord" or "sox"
-           silence: '1.0', //seconds of silence before ending
-        })
-        ws = new WebSocket('ws://192.168.254.161:8090');
         recording
           .stream()
           .on('error', console.error)
@@ -62,11 +66,11 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
         console.log('HAI SCRITTO <'+ data + '>??? ...zzo vuoi?');
       break;
     }
+    ws.socket.on('message', function incoming(data) {
+      console.log(data);
+    });
   })
 
-  ws.socket.on('message', function incoming(data) {
-    console.log(data);
-  });
 }
 
 microphoneStream(encoding, sampleRateHertz, languageCode) 

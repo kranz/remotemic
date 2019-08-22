@@ -11,12 +11,11 @@ const wss = WebSocket.createServer({host: '192.168.254.161', port: 8090},handle)
 var comune = "";
 
 function handle(stream)  {
-	var target = fs.createWriteStream('testalo.wav', { encoding: 'binary' });
 	stream.pipe(recognizeStream);
   stream.on('close', function (){
-    target.end();
+
   }).on('error', function() {
-    target.end();
+
   })
 }
 
@@ -42,18 +41,17 @@ const recognizeStream = client
     comune = data.results[0] && data.results[0].alternatives[0]
         ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
         : `\n\nReached transcription time limit, press Ctrl+C\n`;
-    process.stdout.write(comune);
+//    process.stdout.write(comune);
 
   });
 
 wss.on('connection', function connection(ws) {
+  console.log("CONNESSIONE DA CLIENT");
   ws.on('message', function incoming(message) {
-    ws.send("bip bip!")
-    if (message=="ENDCHUNK") {
-      console.log(message);
-      setTimeout(() => {
-        ws.send(comune);
-      }, 1000)
+    if (comune.length>0) {
+      console.log(comune);
+      ws.send(comune);
+      comune="";
     }
   }).on('close', function () {
     console.log("FINITO")
