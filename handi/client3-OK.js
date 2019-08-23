@@ -41,7 +41,7 @@ function microphoneStream(encoding, sampleRateHertz, languageCode) {
      recordProgram: 'sox', // Try also "arecord" or "sox"
      silence: '1.0', //seconds of silence before ending
   })
-  ws = new WebSocket('ws://remotemic:8090');
+  ws = new WebSocket('ws://192.168.254.161:8090');
 
   standard_input.on('data', function(data) {
     switch(data) 

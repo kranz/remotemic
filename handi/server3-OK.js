@@ -7,13 +7,7 @@ const encoding = 'LINEAR16';
 const sampleRateHertz = 16000;
 const languageCode = 'it-IT';
 
-const wss = WebSocket.createServer({host: 'remotemic', port: 8090},handle);
-
-function timestamp() {
-  var y = new Date();
-  return y.toString().substr(16,9)+y.getMilliseconds()
-}
-
+const wss = WebSocket.createServer({host: '192.168.254.161', port: 8090},handle);
 var comune = "";
 
 function handle(stream)  {
@@ -45,7 +39,7 @@ const recognizeStream = client
   .on('error', console.error)
   .on('data', (data) => {
     comune = data.results[0] && data.results[0].alternatives[0]
-        ? `${timestamp()}-<LETTO>: ${data.results[0].alternatives[0].transcript}\n`
+        ? `Transcription: ${data.results[0].alternatives[0].transcript}\n`
         : `\n\nReached transcription time limit, press Ctrl+C\n`;
 //    process.stdout.write(comune);
 
@@ -55,7 +49,6 @@ wss.on('connection', function connection(ws) {
   console.log("CONNESSIONE DA CLIENT");
   ws.on('message', function incoming(message) {
     if (comune.length>0) {
-      comune = comune.replace("<LETTO>",timestamp())
       console.log(comune);
       ws.send(comune);
       comune="";
