@@ -34,7 +34,7 @@ const config = {
 
 const request = {
   config,
-  interimResults: false, //Get interim results from stream
+  interimResults: true, //Get interim results from stream
 };
 
 // Creates a client
@@ -47,12 +47,14 @@ const recognizeStream = client
     comune = data.results[0] && data.results[0].alternatives[0]
         ? `${timestamp()}-<LETTO>: ${data.results[0].alternatives[0].transcript}\n`
         : `\n\nReached transcription time limit, press Ctrl+C\n`;
-//    process.stdout.write(comune);
+    // process.stdout.write(comune);
 
   });
 
 wss.on('connection', function connection(ws) {
-  console.log("CONNESSIONE DA CLIENT");
+  let msg = "CONNESSIONE DA CLIENT"
+  console.log(msg);
+  ws.send(msg);
   ws.on('message', function incoming(message) {
     if (comune.length>0) {
       comune = comune.replace("<LETTO>",timestamp())

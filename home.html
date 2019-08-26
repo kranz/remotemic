@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="it">
+	<head>
+	    <meta charset="utf-8" />
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	    <title>PROVA</title>
+	    <script
+		  src="https://code.jquery.com/jquery-3.4.1.js"
+		  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+		  crossorigin="anonymous">
+  	    </script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.js"></script>
+
+	</head>
+	<body>
+		<button id="clicca">
+		I miei Ingredienti
+		</button>
+		<hr />
+		<div id="result">
+		...in arrivo
+		</div>
+		<script>
+			$(document).ready(function(){
+			  $("#clicca").on('click',(e) => {
+			    e.preventDefault();
+			    const url = 'http://www.reddit.com/r/reactjs.json'
+			    const url1 = 'http://dc02.kranz.cloud:3000/barbri/foods/index'
+			    const doRequest = axios.get(url1);
+      			doRequest.then(
+      				(res) => {
+		            var lista = res.data.data.children.map(child => child.data);
+		            var pippo="";
+			    	},
+			        (err) => {
+			            console.log(err);
+			        },
+      		   );
+/*			    $.get({
+			        url: "http://www.reddit.com/r/reactjs.json",
+			        headers: {
+                      'Access-Control-Allow-Origin': '*'
+                	},
+			        success: function (result) {
+			          $("#result").html(result);
+			        },
+			        error: function (err) {
+			          console.log(err);
+			        }
+			    }); */
+			  })
+			})
+		</script>
+	</body>
+</html>
+
